@@ -1,9 +1,7 @@
 package ca.elikellendonk.sfpetclinic.model;
 
 import java.time.LocalDate;
-import javax.persistence.Entity;
 
-@Entity
 public class Pet {
   private PetType petType;
   private Owner owner;
