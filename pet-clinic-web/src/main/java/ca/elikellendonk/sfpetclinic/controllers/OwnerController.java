@@ -8,6 +8,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class OwnerController {
   @RequestMapping({"/owners", "/owners/", "/owners.html"})
   public String index(Model model) {
-    return "owner-index";
+    return "owners/index";
   }
 }
