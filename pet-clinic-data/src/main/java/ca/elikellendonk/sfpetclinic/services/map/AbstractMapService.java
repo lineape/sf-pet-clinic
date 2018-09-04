@@ -1,7 +1,9 @@
 package ca.elikellendonk.sfpetclinic.services.map;
 
 import ca.elikellendonk.sfpetclinic.services.CrudService;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public abstract class AbstractMapService<T, Id> implements CrudService<T, Id> {
@@ -11,8 +13,8 @@ public abstract class AbstractMapService<T, Id> implements CrudService<T, Id> {
     return map.get(id);
   }
 
-  public Iterable<T> findAll() {
-    return map.values();
+  public List<T> findAll() {
+    return new ArrayList<>(map.values());
   }
 
   public void delete(T o) {

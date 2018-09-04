@@ -1,13 +1,15 @@
 package ca.elikellendonk.sfpetclinic.services;
 
+import java.util.List;
+
 public interface CrudService<T, Id> {
-  T findById(Id id);
+  public T findById(Id id);
 
-  T save(T o);
+  public T save(T o);
 
-  Iterable<T> findAll();
+  public List<T> findAll();
 
-  void delete(T o);
+  public void delete(T o);
 
-  void deleteById(Id id);
+  public void deleteById(Id id);
 }
