@@ -2,6 +2,7 @@ package ca.elikellendonk.sfpetclinic.services.map;
 
 import ca.elikellendonk.sfpetclinic.model.Owner;
 import ca.elikellendonk.sfpetclinic.services.OwnerService;
+import lombok.NonNull;
 
 public class OwnerServiceMap extends AbstractMapService<Owner, Long> implements OwnerService {
   private Long generateId() {
@@ -27,7 +28,7 @@ public class OwnerServiceMap extends AbstractMapService<Owner, Long> implements 
   }
 
   @Override
-  public Owner save(Owner owner) {
+  public Owner save(@NonNull Owner owner) {
     if (owner.isNew()) {
       owner.setId(generateId());
     }

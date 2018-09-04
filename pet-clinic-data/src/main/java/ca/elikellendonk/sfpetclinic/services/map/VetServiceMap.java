@@ -2,6 +2,7 @@ package ca.elikellendonk.sfpetclinic.services.map;
 
 import ca.elikellendonk.sfpetclinic.model.Vet;
 import ca.elikellendonk.sfpetclinic.services.VetService;
+import lombok.NonNull;
 
 public class VetServiceMap extends AbstractMapService<Vet, Long> implements VetService {
   private Long generateId() {
@@ -15,7 +16,7 @@ public class VetServiceMap extends AbstractMapService<Vet, Long> implements VetS
   }
 
   @Override
-  public Vet save(Vet vet) {
+  public Vet save(@NonNull Vet vet) {
     if (vet.isNew()) {
       vet.setId(generateId());
     }

@@ -2,6 +2,7 @@ package ca.elikellendonk.sfpetclinic.services.map;
 
 import ca.elikellendonk.sfpetclinic.model.Pet;
 import ca.elikellendonk.sfpetclinic.services.PetService;
+import lombok.NonNull;
 
 public class PetServiceMap extends AbstractMapService<Pet, Long> implements PetService {
   private Long generateId() {
@@ -15,7 +16,7 @@ public class PetServiceMap extends AbstractMapService<Pet, Long> implements PetS
   }
 
   @Override
-  public Pet save(Pet pet) {
+  public Pet save(@NonNull Pet pet) {
     if (pet.isNew()) {
       pet.setId(generateId());
     }
