@@ -1,6 +1,7 @@
 package ca.elikellendonk.sfpetclinic.model;
 
 import java.io.Serializable;
+import java.util.StringJoiner;
 
 public abstract class BaseEntity implements Serializable {
   private Long id;
@@ -34,5 +35,10 @@ public abstract class BaseEntity implements Serializable {
   @Override
   public int hashCode() {
     return !isNew() ? id.hashCode() : 0;
+  }
+
+  @Override
+  public String toString() {
+    return new StringJoiner(", ", getClass() + "[", "]").add("id=" + id).toString();
   }
 }
