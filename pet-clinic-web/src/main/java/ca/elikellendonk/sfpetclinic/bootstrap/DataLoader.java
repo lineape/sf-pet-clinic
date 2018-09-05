@@ -66,20 +66,13 @@ public class DataLoader implements CommandLineRunner {
 
     Vet vet1 = vetService.save(makeVet("Jill", "Frazier"));
     vet1.getSpecialties().add(goodWithCats);
-    goodWithCats.getVets().add(vet1);
-
-    vetService.save(vet1);
-    specialtyService.save(goodWithCats);
 
     Vet vet2 = vetService.save(makeVet("Daniel", "Jackson"));
     vet2.getSpecialties().add(goodWithCats);
     vet2.getSpecialties().add(goodWithDogs);
-    goodWithCats.getVets().add(vet2);
-    goodWithDogs.getVets().add(vet2);
 
+    vetService.save(vet1);
     vetService.save(vet2);
-    specialtyService.save(goodWithCats);
-    specialtyService.save(goodWithDogs);
   }
 
   private PetType makePetType(String name) {
