@@ -1,18 +1,17 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-  <meta charset="UTF-8">
-  <title>Pet Clinic Owners Index</title>
-</head>
-<body>
-<h1 th:text="'Owners Index Page'">Owners Index Page!</h1>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: layout (~{::body},'owners')}">
 
-<table>
+<body>
+<h2>Owners</h2>
+
+<table class="table table-striped">
   <thead>
   <tr>
     <th>Id</th>
     <th>First Name</th>
     <th>Last Name</th>
+    <th>Pets</th>
   </tr>
   </thead>
   <tbody>
@@ -20,9 +19,14 @@
     <td th:text="${owner.id}">Id</td>
     <td th:text="${owner.firstName}">First</td>
     <td th:text="${owner.lastName}">Last</td>
+    <td>
+      <span th:each="pet, loop: ${owner.pets}"
+            th:text="${pet.name} + (${loop.last} ? '' : ', ')"></span>
+    </td>
   </tr>
   </tbody>
 </table>
 
 </body>
+
 </html>
