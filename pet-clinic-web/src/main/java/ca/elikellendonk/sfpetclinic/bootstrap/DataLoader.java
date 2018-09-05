@@ -32,18 +32,21 @@ public class DataLoader implements CommandLineRunner {
 
   @Override
   public void run(String... args) throws Exception {
-    PetType cat = createPetType("Cat");
-    PetType dog = createPetType("Dog");
+    PetType cat = petTypeService.save(makePetType("Cat"));
+    PetType dog = petTypeService.save(makePetType("Dog"));
 
-    createOwner("Joe", "Smith", new Pet[] {makePet("Ralph", dog)});
-    createOwner("Jim", "Lee", new Pet[] {makePet("Fluffy", dog), makePet("Whiskers", cat)});
+    Owner owner1 = makeOwner("Joe", "Smith", "123 Avenue", "New york", "444-222-3333");
+    owner1.getPets().add(makePet("Ralph", dog));
 
-    createVet("Jill", "Frazier");
-    createVet("Daniel", "Jackson");
-  }
+    Owner owner2 = makeOwner("Jim", "Lee", "123 street", "Toronto", "444-333-2222");
+    owner2.getPets().add(petService.save(makePet("Fluffy", dog)));
+    owner2.getPets().add(petService.save(makePet("Whiskers", cat)));
 
-  private PetType createPetType(String name) {
-    return petTypeService.save(makePetType(name));
+    ownerService.save(owner1);
+    ownerService.save(owner2);
+
+    vetService.save(makeVet("Jill", "Frazier"));
+    vetService.save(makeVet("Daniel", "Jackson"));
   }
 
   private PetType makePetType(String name) {
@@ -53,22 +56,14 @@ public class DataLoader implements CommandLineRunner {
     return petType;
   }
 
-  private Owner createOwner(String firstName, String lastName, Pet[] pets) {
-    Owner owner = makeOwner(firstName, lastName);
-
-    for (Pet pet : pets) {
-      owner.getPets().add(pet);
-      pet.setOwner(owner);
-      petService.save(pet);
-    }
-
-    return ownerService.save(owner);
-  }
-
-  private Owner makeOwner(String firstName, String lastName) {
+  private Owner makeOwner(
+      String firstName, String lastName, String address, String city, String telephone) {
     Owner owner = new Owner();
     owner.setFirstName(firstName);
     owner.setLastName(lastName);
+    owner.setAddress(address);
+    owner.setCity(city);
+    owner.setTelephone(telephone);
 
     return owner;
   }
@@ -80,10 +75,6 @@ public class DataLoader implements CommandLineRunner {
     pet.setPetType(petType);
 
     return pet;
-  }
-
-  private Vet createVet(String firstName, String lastName) {
-    return vetService.save(makeVet(firstName, lastName));
   }
 
   private Vet makeVet(String firstName, String lastName) {
