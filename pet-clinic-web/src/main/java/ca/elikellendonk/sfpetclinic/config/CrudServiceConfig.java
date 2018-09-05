@@ -19,13 +19,13 @@ public class CrudServiceConfig {
   static class CrudServiceMap {
 
     @Bean
-    public OwnerService ownerService() {
-      return new OwnerServiceMap();
+    public OwnerService ownerService(PetService petService) {
+      return new OwnerServiceMap(petService);
     }
 
     @Bean
-    public PetService petService() {
-      return new PetServiceMap();
+    public PetService petService(PetTypeService petTypeService) {
+      return new PetServiceMap(petTypeService);
     }
 
     @Bean

@@ -1,10 +1,18 @@
 package ca.elikellendonk.sfpetclinic.services.map;
 
 import ca.elikellendonk.sfpetclinic.model.Owner;
+import ca.elikellendonk.sfpetclinic.model.Pet;
 import ca.elikellendonk.sfpetclinic.services.OwnerService;
+import ca.elikellendonk.sfpetclinic.services.PetService;
 import lombok.NonNull;
 
 public class OwnerServiceMap extends AbstractMapService<Owner, Long> implements OwnerService {
+  private PetService petService;
+
+  public OwnerServiceMap(PetService petService) {
+    this.petService = petService;
+  }
+
   private Long generateId() {
     Long lastId = 0L;
 
@@ -31,6 +39,12 @@ public class OwnerServiceMap extends AbstractMapService<Owner, Long> implements 
   public Owner save(@NonNull Owner owner) {
     if (owner.isNew()) {
       owner.setId(generateId());
+    }
+
+    for (Pet pet : owner.getPets()) {
+      if (pet.isNew()) {
+        petService.save(pet);
+      }
     }
 
     return save(owner.getId(), owner);
