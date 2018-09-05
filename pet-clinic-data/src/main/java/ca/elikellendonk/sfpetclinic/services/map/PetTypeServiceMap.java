@@ -22,4 +22,18 @@ public class PetTypeServiceMap extends AbstractMapService<PetType, Long> impleme
 
     return save(o.getId(), o);
   }
+
+  @Override
+  public PetType findByName(String name) {
+    PetType match = null;
+
+    for (PetType o : map.values()) {
+      if (o.getName().equals(name)) {
+        match = o;
+        break;
+      }
+    }
+
+    return match;
+  }
 }
