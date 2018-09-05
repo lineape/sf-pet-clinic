@@ -20,8 +20,10 @@
     <td th:text="${owner.firstName}">First</td>
     <td th:text="${owner.lastName}">Last</td>
     <td>
-      <span th:each="pet, loop: ${owner.pets}"
-            th:text="${pet.name} + (${loop.last} ? '' : ', ')"></span>
+      <div th:each="pet : ${owner.pets}">
+        <span th:text="${pet.name}"></span>
+        <span th:if="${pet.petType != null}" th:text="'(' + ${pet.petType.name} +  ')'"></span>
+      </div>
     </td>
   </tr>
   </tbody>
