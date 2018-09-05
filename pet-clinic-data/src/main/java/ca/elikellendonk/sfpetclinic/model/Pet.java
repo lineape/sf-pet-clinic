@@ -1,6 +1,7 @@
 package ca.elikellendonk.sfpetclinic.model;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Set;
 
 public class Pet extends BaseEntity {
@@ -8,7 +9,7 @@ public class Pet extends BaseEntity {
   private PetType petType;
   private Owner owner;
   private LocalDate birthDate;
-  private Set<Visit> visits;
+  private Set<Visit> visits = new HashSet<>();
 
   public String getName() {
     return name;

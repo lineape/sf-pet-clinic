@@ -1,11 +1,12 @@
 package ca.elikellendonk.sfpetclinic.model;
 
+import java.util.HashSet;
 import java.util.Set;
 
 public class Specialty extends BaseEntity {
   private String name;
   private String description;
-  private Set<Vet> vets;
+  private Set<Vet> vets = new HashSet<>();
 
   public String getName() {
     return name;
