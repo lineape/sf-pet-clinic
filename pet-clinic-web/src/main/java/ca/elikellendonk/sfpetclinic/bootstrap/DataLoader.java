@@ -24,49 +24,50 @@ public class DataLoader implements CommandLineRunner {
 
   @Override
   public void run(String... args) throws Exception {
-    Owner owner1 = new Owner();
-    owner1.setFirstName("Joe");
-    owner1.setLastName("Smith");
+    createOwner("Joe", "Smith", new Pet[] {makePet("Ralph")});
+    createOwner("Jim", "Lee", new Pet[] {makePet("Fluffy"), makePet("Whiskers")});
 
-    Pet pet1 = new Pet();
-    pet1.setName("Ralph");
-    pet1.setOwner(owner1);
-    pet1.setBirthDate(LocalDate.now());
+    createVet("Jill", "Frazier");
+    createVet("Daniel", "Jackson");
+  }
 
-    Owner owner2 = new Owner();
-    owner2.setFirstName("Jim");
-    owner2.setLastName("Lee");
+  private Owner createOwner(String firstName, String lastName, Pet[] pets) {
+    Owner owner = makeOwner(firstName, lastName);
 
-    Pet pet2 = new Pet();
-    pet2.setName("Fluffy");
-    pet2.setOwner(owner2);
-    pet2.setBirthDate(LocalDate.now());
+    for (Pet pet : pets) {
+      owner.getPets().add(pet);
+      pet.setOwner(owner);
+      petService.save(pet);
+    }
 
-    Pet pet3 = new Pet();
-    pet3.setName("Whiskers");
-    pet3.setOwner(owner2);
-    pet3.setBirthDate(LocalDate.now());
+    return ownerService.save(owner);
+  }
 
-    petService.save(pet1);
-    petService.save(pet2);
-    petService.save(pet3);
+  private Owner makeOwner(String firstName, String lastName) {
+    Owner owner = new Owner();
+    owner.setFirstName(firstName);
+    owner.setLastName(lastName);
 
-    owner1.getPets().add(pet1);
-    owner2.getPets().add(pet2);
-    owner2.getPets().add(pet3);
+    return owner;
+  }
 
-    ownerService.save(owner1);
-    ownerService.save(owner2);
+  private Pet makePet(String name) {
+    Pet pet = new Pet();
+    pet.setName(name);
+    pet.setBirthDate(LocalDate.now());
 
-    Vet vet1 = new Vet();
-    vet1.setFirstName("Jill");
-    vet1.setLastName("Frazier");
+    return pet;
+  }
 
-    Vet vet2 = new Vet();
-    vet2.setFirstName("Daniel");
-    vet2.setLastName("Jackson");
+  private Vet createVet(String firstName, String lastName) {
+    return vetService.save(makeVet(firstName, lastName));
+  }
 
-    vetService.save(vet1);
-    vetService.save(vet2);
+  private Vet makeVet(String firstName, String lastName) {
+    Vet vet = new Vet();
+    vet.setFirstName(firstName);
+    vet.setLastName(lastName);
+
+    return vet;
   }
 }
