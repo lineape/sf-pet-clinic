@@ -2,9 +2,11 @@ package ca.elikellendonk.sfpetclinic.bootstrap;
 
 import ca.elikellendonk.sfpetclinic.model.Owner;
 import ca.elikellendonk.sfpetclinic.model.Pet;
+import ca.elikellendonk.sfpetclinic.model.PetType;
 import ca.elikellendonk.sfpetclinic.model.Vet;
 import ca.elikellendonk.sfpetclinic.services.OwnerService;
 import ca.elikellendonk.sfpetclinic.services.PetService;
+import ca.elikellendonk.sfpetclinic.services.PetTypeService;
 import ca.elikellendonk.sfpetclinic.services.VetService;
 import java.time.LocalDate;
 import org.springframework.boot.CommandLineRunner;
@@ -12,23 +14,43 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class DataLoader implements CommandLineRunner {
-  private final PetService petService;
-  private final VetService vetService;
   private final OwnerService ownerService;
+  private final PetService petService;
+  private final PetTypeService petTypeService;
+  private final VetService vetService;
 
-  public DataLoader(PetService petService, VetService vetService, OwnerService ownerService) {
-    this.petService = petService;
-    this.vetService = vetService;
+  public DataLoader(
+      OwnerService ownerService,
+      PetService petService,
+      PetTypeService petTypeService,
+      VetService vetService) {
     this.ownerService = ownerService;
+    this.petService = petService;
+    this.petTypeService = petTypeService;
+    this.vetService = vetService;
   }
 
   @Override
   public void run(String... args) throws Exception {
-    createOwner("Joe", "Smith", new Pet[] {makePet("Ralph")});
-    createOwner("Jim", "Lee", new Pet[] {makePet("Fluffy"), makePet("Whiskers")});
+    PetType cat = createPetType("Cat");
+    PetType dog = createPetType("Dog");
+
+    createOwner("Joe", "Smith", new Pet[] {makePet("Ralph", dog)});
+    createOwner("Jim", "Lee", new Pet[] {makePet("Fluffy", dog), makePet("Whiskers", cat)});
 
     createVet("Jill", "Frazier");
     createVet("Daniel", "Jackson");
+  }
+
+  private PetType createPetType(String name) {
+    return petTypeService.save(makePetType(name));
+  }
+
+  private PetType makePetType(String name) {
+    PetType petType = new PetType();
+    petType.setName(name);
+
+    return petType;
   }
 
   private Owner createOwner(String firstName, String lastName, Pet[] pets) {
@@ -51,10 +73,11 @@ public class DataLoader implements CommandLineRunner {
     return owner;
   }
 
-  private Pet makePet(String name) {
+  private Pet makePet(String name, PetType petType) {
     Pet pet = new Pet();
     pet.setName(name);
     pet.setBirthDate(LocalDate.now());
+    pet.setPetType(petType);
 
     return pet;
   }
