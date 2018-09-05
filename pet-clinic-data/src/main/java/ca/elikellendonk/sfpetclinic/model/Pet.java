@@ -1,12 +1,14 @@
 package ca.elikellendonk.sfpetclinic.model;
 
 import java.time.LocalDate;
+import java.util.Set;
 
 public class Pet extends BaseEntity {
   private String name;
   private PetType petType;
   private Owner owner;
   private LocalDate birthDate;
+  private Set<Visit> visits;
 
   public String getName() {
     return name;
@@ -38,5 +40,13 @@ public class Pet extends BaseEntity {
 
   public void setBirthDate(LocalDate birthDate) {
     this.birthDate = birthDate;
+  }
+
+  public Set<Visit> getVisits() {
+    return visits;
+  }
+
+  public void setVisits(Set<Visit> visits) {
+    this.visits = visits;
   }
 }
