@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.StringJoiner;
 
 public abstract class BaseEntity implements Serializable {
-  private Long id;
+  protected Long id;
 
   public Long getId() {
     return id;
@@ -29,12 +29,12 @@ public abstract class BaseEntity implements Serializable {
 
     BaseEntity that = (BaseEntity) o;
 
-    return isNew() ? id.equals(that.id) : that.isNew();
+    return id == null ? that.id == null : id.equals(that.id);
   }
 
   @Override
   public int hashCode() {
-    return !isNew() ? id.hashCode() : 0;
+    return id != null ? id.hashCode() : 0;
   }
 
   @Override
