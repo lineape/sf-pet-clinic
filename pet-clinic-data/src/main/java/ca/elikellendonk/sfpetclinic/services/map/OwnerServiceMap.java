@@ -6,38 +6,29 @@ import ca.elikellendonk.sfpetclinic.services.OwnerService;
 import ca.elikellendonk.sfpetclinic.services.PetService;
 import lombok.NonNull;
 
-public class OwnerServiceMap extends AbstractMapService<Owner, Long> implements OwnerService {
+public class OwnerServiceMap extends AbstractMapService<Owner> implements OwnerService {
   private PetService petService;
 
   public OwnerServiceMap(PetService petService) {
     this.petService = petService;
   }
 
-  private Long generateId() {
-    Long lastId = 0L;
-
-    for (Long id : map.keySet()) {
-      lastId = id > lastId ? id : lastId;
-    }
-
-    return lastId + 1;
-  }
-
   @Override
   public Owner findByLastName(String lastName) {
-    Owner match = null;
     for (Owner o : map.values()) {
       if (o.getLastName().equals(lastName)) {
-        match = o;
-        break;
+        return o;
       }
     }
 
-    return match;
+    return null;
   }
 
   @Override
   public Owner save(@NonNull Owner owner) {
+    if (owner == null) {
+      return null;
+    }
     if (owner.isNew()) {
       owner.setId(generateId());
     }

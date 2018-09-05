@@ -40,8 +40,8 @@ public class CrudServiceConfig {
     }
 
     @Bean
-    public VetService vetService() {
-      return new VetServiceMap();
+    public VetService vetService(SpecialtyService specialtyService) {
+      return new VetServiceMap(specialtyService);
     }
   }
 }

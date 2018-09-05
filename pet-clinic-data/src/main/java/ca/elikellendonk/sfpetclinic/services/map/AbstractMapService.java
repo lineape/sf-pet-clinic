@@ -1,15 +1,26 @@
 package ca.elikellendonk.sfpetclinic.services.map;
 
+import ca.elikellendonk.sfpetclinic.model.BaseEntity;
 import ca.elikellendonk.sfpetclinic.services.CrudService;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public abstract class AbstractMapService<T, Id> implements CrudService<T, Id> {
-  protected Map<Id, T> map = new HashMap<>();
+public abstract class AbstractMapService<T extends BaseEntity> implements CrudService<T, Long> {
+  protected Long generateId() {
+    Long lastId = 0L;
 
-  public T findById(Id id) {
+    for (Long id : map.keySet()) {
+      lastId = id > lastId ? id : lastId;
+    }
+
+    return lastId + 1;
+  }
+
+  protected Map<Long, T> map = new HashMap<>();
+
+  public T findById(Long id) {
     return map.get(id);
   }
 
@@ -21,11 +32,22 @@ public abstract class AbstractMapService<T, Id> implements CrudService<T, Id> {
     map.entrySet().removeIf(entry -> entry.getValue().equals(o));
   }
 
-  public void deleteById(Id id) {
+  public void deleteById(Long id) {
     map.remove(id);
   }
 
-  protected T save(Id id, T o) {
+  public T save(T o) {
+    if (o == null) {
+      return null;
+    }
+    if (o.isNew()) {
+      o.setId(generateId());
+    }
+
+    return save(o.getId(), o);
+  }
+
+  protected T save(Long id, T o) {
     map.put(id, o);
 
     return o;

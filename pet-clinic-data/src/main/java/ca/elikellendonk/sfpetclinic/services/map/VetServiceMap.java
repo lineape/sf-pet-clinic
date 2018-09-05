@@ -1,24 +1,30 @@
 package ca.elikellendonk.sfpetclinic.services.map;
 
+import ca.elikellendonk.sfpetclinic.model.Specialty;
 import ca.elikellendonk.sfpetclinic.model.Vet;
+import ca.elikellendonk.sfpetclinic.services.SpecialtyService;
 import ca.elikellendonk.sfpetclinic.services.VetService;
-import lombok.NonNull;
 
-public class VetServiceMap extends AbstractMapService<Vet, Long> implements VetService {
-  private Long generateId() {
-    Long lastId = 0L;
+public class VetServiceMap extends AbstractMapService<Vet> implements VetService {
+  private SpecialtyService specialtyService;
 
-    for (Long id : map.keySet()) {
-      lastId = id > lastId ? id : lastId;
-    }
-
-    return lastId + 1;
+  public VetServiceMap(SpecialtyService specialtyService) {
+    this.specialtyService = specialtyService;
   }
 
   @Override
-  public Vet save(@NonNull Vet vet) {
+  public Vet save(Vet vet) {
+    if (vet == null) {
+      return null;
+    }
     if (vet.isNew()) {
       vet.setId(generateId());
+    }
+
+    for (Specialty s : vet.getSpecialties()) {
+      if (s.isNew()) {
+        specialtyService.save(s);
+      }
     }
 
     return save(vet.getId(), vet);
