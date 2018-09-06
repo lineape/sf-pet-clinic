@@ -12,6 +12,17 @@ public class PetServiceMap extends AbstractMapService<Pet> implements PetService
   }
 
   @Override
+  public Pet findByName(String name) {
+    for (Pet pet : map.values()) {
+      if (pet.getName().equals(name)) {
+        return pet;
+      }
+    }
+
+    return null;
+  }
+
+  @Override
   public Pet save(Pet pet) {
     if (pet == null) {
       return null;

@@ -12,6 +12,11 @@ public class PetServiceJpa implements PetService {
   }
 
   @Override
+  public Pet findByName(String name) {
+    return pets.findByName(name);
+  }
+
+  @Override
   public Pet findById(Long id) {
     return pets.findById(id).orElse(null);
   }
