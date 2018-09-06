@@ -29,4 +29,37 @@ public class VetServiceMap extends AbstractMapService<Vet> implements VetService
 
     return save(vet.getId(), vet);
   }
+
+  @Override
+  public Vet findByFirstName(String firstName) {
+    for (Vet vet : map.values()) {
+      if (vet.getFirstName().equals(firstName)) {
+        return vet;
+      }
+    }
+
+    return null;
+  }
+
+  @Override
+  public Vet findByLastName(String lastName) {
+    for (Vet vet : map.values()) {
+      if (vet.getLastName().equals(lastName)) {
+        return vet;
+      }
+    }
+
+    return null;
+  }
+
+  @Override
+  public Vet findByFirstNameAndLastName(String firstName, String lastName) {
+    for (Vet vet : map.values()) {
+      if (vet.getFirstName().equals(firstName) && vet.getLastName().equals(lastName)) {
+        return vet;
+      }
+    }
+
+    return null;
+  }
 }
