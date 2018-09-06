@@ -17,8 +17,8 @@ public class OwnerServiceJpa implements OwnerService {
   }
 
   @Override
-  public Owner findById(Long aLong) {
-    return owners.findById(aLong).orElse(null);
+  public Owner findById(Long id) {
+    return owners.findById(id).orElse(null);
   }
 
   @Override
