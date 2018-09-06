@@ -47,6 +47,11 @@ public abstract class AbstractMapService<T extends BaseEntity> implements CrudSe
     return save(o.getId(), o);
   }
 
+  @Override
+  public long count() {
+    return map.size();
+  }
+
   protected T save(Long id, T o) {
     map.put(id, o);
 

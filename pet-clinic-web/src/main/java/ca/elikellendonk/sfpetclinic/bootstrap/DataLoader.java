@@ -37,10 +37,10 @@ public class DataLoader implements CommandLineRunner {
 
   @Override
   public void run(String... args) throws Exception {
-    if (ownerService.findAll().isEmpty()) {
+    if (ownerService.count() == 0) {
       seedOwnersAndPets();
     }
-    if (vetService.findAll().isEmpty()) {
+    if (vetService.count() == 0) {
       seedVetsAndSpecialties();
     }
   }
