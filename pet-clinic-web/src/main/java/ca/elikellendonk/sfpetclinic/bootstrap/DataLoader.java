@@ -5,7 +5,9 @@ import ca.elikellendonk.sfpetclinic.model.Pet;
 import ca.elikellendonk.sfpetclinic.model.PetType;
 import ca.elikellendonk.sfpetclinic.model.Specialty;
 import ca.elikellendonk.sfpetclinic.model.Vet;
+import ca.elikellendonk.sfpetclinic.model.Visit;
 import ca.elikellendonk.sfpetclinic.services.OwnerService;
+import ca.elikellendonk.sfpetclinic.services.PetService;
 import ca.elikellendonk.sfpetclinic.services.PetTypeService;
 import ca.elikellendonk.sfpetclinic.services.SpecialtyService;
 import ca.elikellendonk.sfpetclinic.services.VetService;
@@ -19,6 +21,7 @@ import org.springframework.stereotype.Component;
 public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
   private final OwnerService owners;
   private final PetTypeService petTypes;
+  private final PetService pets;
   private final SpecialtyService specialties;
   private final VetService vets;
   private final VisitService visits;
@@ -26,11 +29,13 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
   public DataLoader(
       OwnerService owners,
       PetTypeService petTypes,
+      PetService pets,
       SpecialtyService specialties,
       VetService vets,
       VisitService visits) {
     this.owners = owners;
     this.petTypes = petTypes;
+    this.pets = pets;
     this.specialties = specialties;
     this.vets = vets;
     this.visits = visits;
@@ -44,6 +49,10 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 
     if (specialties.count() == 0) {
       seedVetsAndSpecialties();
+    }
+
+    if (visits.count() == 0) {
+      seedVisits();
     }
   }
 
@@ -75,6 +84,13 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 
     vets.save(vet1);
     vets.save(vet2);
+  }
+
+  private void seedVisits() {
+    visits.save(
+        makeVisit("Ralph is sick", pets.findByName("Ralph"), vets.findByLastName("Jackson")));
+    visits.save(
+        makeVisit("Has a Hairball", pets.findByName("Whiskers"), vets.findByLastName("Frazier")));
   }
 
   private PetType makePetType(String name) {
@@ -119,5 +135,14 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
     specialty.setDescription(description);
 
     return specialty;
+  }
+
+  private Visit makeVisit(String description, Pet pet, Vet vet) {
+    Visit visit = new Visit();
+    visit.setDescription(description);
+    visit.setPet(pet);
+    visit.setVet(vet);
+
+    return visit;
   }
 }
