@@ -20,8 +20,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 @Configuration
-@Profile("jpa")
+@Profile({"data-jpa", "default"})
 public class CrudConfigJpa {
+
   @Bean
   public OwnerService ownerService(OwnerRepository ownerRepository) {
     return new OwnerServiceJpa(ownerRepository);
@@ -38,7 +39,7 @@ public class CrudConfigJpa {
   }
 
   @Bean
-  public SpecialtyService vetService(SpecialtyRepository specialtyRepository) {
+  public SpecialtyService specialtyService(SpecialtyRepository specialtyRepository) {
     return new SpecialtyServiceJpa(specialtyRepository);
   }
 

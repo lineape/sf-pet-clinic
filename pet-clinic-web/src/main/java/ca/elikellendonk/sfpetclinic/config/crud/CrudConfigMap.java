@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 @Configuration
-@Profile({"local", "default"})
+@Profile({"data-hash-map"})
 public class CrudConfigMap {
   @Bean
   public OwnerService ownerService(PetService petService) {

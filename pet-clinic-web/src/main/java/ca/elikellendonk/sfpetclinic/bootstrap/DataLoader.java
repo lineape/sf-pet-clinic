@@ -6,41 +6,39 @@ import ca.elikellendonk.sfpetclinic.model.PetType;
 import ca.elikellendonk.sfpetclinic.model.Specialty;
 import ca.elikellendonk.sfpetclinic.model.Vet;
 import ca.elikellendonk.sfpetclinic.services.OwnerService;
-import ca.elikellendonk.sfpetclinic.services.PetService;
 import ca.elikellendonk.sfpetclinic.services.PetTypeService;
 import ca.elikellendonk.sfpetclinic.services.SpecialtyService;
 import ca.elikellendonk.sfpetclinic.services.VetService;
 import java.time.LocalDate;
-import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
 @Component
-public class DataLoader implements CommandLineRunner {
+public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
   private final OwnerService ownerService;
-  private final PetService petService;
   private final PetTypeService petTypeService;
   private final SpecialtyService specialtyService;
   private final VetService vetService;
 
   public DataLoader(
       OwnerService ownerService,
-      PetService petService,
       PetTypeService petTypeService,
       SpecialtyService specialtyService,
       VetService vetService) {
     this.ownerService = ownerService;
-    this.petService = petService;
     this.petTypeService = petTypeService;
     this.specialtyService = specialtyService;
     this.vetService = vetService;
   }
 
   @Override
-  public void run(String... args) throws Exception {
-    if (ownerService.count() == 0) {
+  public void onApplicationEvent(ContextRefreshedEvent event) {
+    if (petTypeService.count() == 0) {
       seedOwnersAndPets();
     }
-    if (vetService.count() == 0) {
+
+    if (specialtyService.count() == 0) {
       seedVetsAndSpecialties();
     }
   }
@@ -50,11 +48,11 @@ public class DataLoader implements CommandLineRunner {
     PetType dog = petTypeService.save(makePetType("Dog"));
 
     Owner owner1 = makeOwner("Joe", "Smith", "123 Avenue", "New york", "444-222-3333");
-    owner1.getPets().add(petService.save(makePet("Ralph", dog)));
+    owner1.addPet(makePet("Ralph", dog));
 
     Owner owner2 = makeOwner("Jim", "Lee", "123 street", "Toronto", "444-333-2222");
-    owner2.getPets().add(petService.save(makePet("Fluffy", dog)));
-    owner2.getPets().add(petService.save(makePet("Whiskers", cat)));
+    owner2.addPet(makePet("Fluffy", dog));
+    owner2.addPet(makePet("Whiskers", cat));
 
     ownerService.save(owner1);
     ownerService.save(owner2);
@@ -64,12 +62,12 @@ public class DataLoader implements CommandLineRunner {
     Specialty goodWithCats = specialtyService.save(makeSpecialty("Cats", "Good with cats"));
     Specialty goodWithDogs = specialtyService.save(makeSpecialty("Dogs", "Good with dogs"));
 
-    Vet vet1 = vetService.save(makeVet("Jill", "Frazier"));
-    vet1.getSpecialties().add(goodWithCats);
+    Vet vet1 = makeVet("Jill", "Frazier");
+    vet1.addSpecialty(goodWithCats);
 
-    Vet vet2 = vetService.save(makeVet("Daniel", "Jackson"));
-    vet2.getSpecialties().add(goodWithCats);
-    vet2.getSpecialties().add(goodWithDogs);
+    Vet vet2 = makeVet("Daniel", "Jackson");
+    vet2.addSpecialty(goodWithCats);
+    vet2.addSpecialty(goodWithDogs);
 
     vetService.save(vet1);
     vetService.save(vet2);
