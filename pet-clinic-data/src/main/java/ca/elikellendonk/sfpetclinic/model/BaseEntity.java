@@ -36,7 +36,7 @@ public abstract class BaseEntity implements Serializable {
 
     BaseEntity that = (BaseEntity) o;
 
-    return id == null ? that.id == null : id.equals(that.id);
+    return id != null && that.id != null && id.equals(that.id);
   }
 
   @Override
