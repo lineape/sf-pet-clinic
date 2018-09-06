@@ -9,6 +9,7 @@ import ca.elikellendonk.sfpetclinic.services.OwnerService;
 import ca.elikellendonk.sfpetclinic.services.PetTypeService;
 import ca.elikellendonk.sfpetclinic.services.SpecialtyService;
 import ca.elikellendonk.sfpetclinic.services.VetService;
+import ca.elikellendonk.sfpetclinic.services.VisitService;
 import java.time.LocalDate;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -16,36 +17,39 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
-  private final OwnerService ownerService;
-  private final PetTypeService petTypeService;
-  private final SpecialtyService specialtyService;
-  private final VetService vetService;
+  private final OwnerService owners;
+  private final PetTypeService petTypes;
+  private final SpecialtyService specialties;
+  private final VetService vets;
+  private final VisitService visits;
 
   public DataLoader(
-      OwnerService ownerService,
-      PetTypeService petTypeService,
-      SpecialtyService specialtyService,
-      VetService vetService) {
-    this.ownerService = ownerService;
-    this.petTypeService = petTypeService;
-    this.specialtyService = specialtyService;
-    this.vetService = vetService;
+      OwnerService owners,
+      PetTypeService petTypes,
+      SpecialtyService specialties,
+      VetService vets,
+      VisitService visits) {
+    this.owners = owners;
+    this.petTypes = petTypes;
+    this.specialties = specialties;
+    this.vets = vets;
+    this.visits = visits;
   }
 
   @Override
   public void onApplicationEvent(ContextRefreshedEvent event) {
-    if (petTypeService.count() == 0) {
+    if (petTypes.count() == 0) {
       seedOwnersAndPets();
     }
 
-    if (specialtyService.count() == 0) {
+    if (specialties.count() == 0) {
       seedVetsAndSpecialties();
     }
   }
 
   private void seedOwnersAndPets() {
-    PetType cat = petTypeService.save(makePetType("Cat"));
-    PetType dog = petTypeService.save(makePetType("Dog"));
+    PetType cat = petTypes.save(makePetType("Cat"));
+    PetType dog = petTypes.save(makePetType("Dog"));
 
     Owner owner1 = makeOwner("Joe", "Smith", "123 Avenue", "New york", "444-222-3333");
     owner1.addPet(makePet("Ralph", dog));
@@ -54,13 +58,13 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
     owner2.addPet(makePet("Fluffy", dog));
     owner2.addPet(makePet("Whiskers", cat));
 
-    ownerService.save(owner1);
-    ownerService.save(owner2);
+    owners.save(owner1);
+    owners.save(owner2);
   }
 
   private void seedVetsAndSpecialties() {
-    Specialty goodWithCats = specialtyService.save(makeSpecialty("Cats", "Good with cats"));
-    Specialty goodWithDogs = specialtyService.save(makeSpecialty("Dogs", "Good with dogs"));
+    Specialty goodWithCats = specialties.save(makeSpecialty("Cats", "Good with cats"));
+    Specialty goodWithDogs = specialties.save(makeSpecialty("Dogs", "Good with dogs"));
 
     Vet vet1 = makeVet("Jill", "Frazier");
     vet1.addSpecialty(goodWithCats);
@@ -69,8 +73,8 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
     vet2.addSpecialty(goodWithCats);
     vet2.addSpecialty(goodWithDogs);
 
-    vetService.save(vet1);
-    vetService.save(vet2);
+    vets.save(vet1);
+    vets.save(vet2);
   }
 
   private PetType makePetType(String name) {
