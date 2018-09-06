@@ -40,4 +40,19 @@ public class VetServiceJpa implements VetService {
   public long count() {
     return vets.count();
   }
+
+  @Override
+  public Vet findByFirstName(String firstName) {
+    return vets.findByFirstName(firstName);
+  }
+
+  @Override
+  public Vet findByLastName(String lastName) {
+    return vets.findByLastName(lastName);
+  }
+
+  @Override
+  public Vet findByFirstNameAndLastName(String firstName, String lastName) {
+    return vets.findByFirstNameAndLastName(firstName, lastName);
+  }
 }
