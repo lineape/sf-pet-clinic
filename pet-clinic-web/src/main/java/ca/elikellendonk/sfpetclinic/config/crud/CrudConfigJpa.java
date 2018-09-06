@@ -1,4 +1,4 @@
-package ca.elikellendonk.sfpetclinic.config.crudservice;
+package ca.elikellendonk.sfpetclinic.config.crud;
 
 import ca.elikellendonk.sfpetclinic.repositories.OwnerRepository;
 import ca.elikellendonk.sfpetclinic.services.OwnerService;
@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Profile;
 
 @Configuration
 @Profile("jpa")
-public class CrudServiceJpa {
+public class CrudConfigJpa {
   @Bean
   public OwnerService ownerService(OwnerRepository ownerRepository) {
     return new OwnerServiceJpa(ownerRepository);

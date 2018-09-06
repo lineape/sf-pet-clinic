@@ -1,4 +1,4 @@
-package ca.elikellendonk.sfpetclinic.config.crudservice;
+package ca.elikellendonk.sfpetclinic.config.crud;
 
 import ca.elikellendonk.sfpetclinic.services.OwnerService;
 import ca.elikellendonk.sfpetclinic.services.PetService;
@@ -16,7 +16,7 @@ import org.springframework.context.annotation.Profile;
 
 @Configuration
 @Profile({"local", "default"})
-public class CrudServiceMap {
+public class CrudConfigMap {
   @Bean
   public OwnerService ownerService(PetService petService) {
     return new OwnerServiceMap(petService);
