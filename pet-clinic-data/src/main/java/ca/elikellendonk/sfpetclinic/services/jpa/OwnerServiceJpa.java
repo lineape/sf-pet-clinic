@@ -5,7 +5,7 @@ import ca.elikellendonk.sfpetclinic.repositories.OwnerRepository;
 import ca.elikellendonk.sfpetclinic.services.OwnerService;
 
 public class OwnerServiceJpa implements OwnerService {
-  private OwnerRepository owners;
+  private final OwnerRepository owners;
 
   public OwnerServiceJpa(OwnerRepository owners) {
     this.owners = owners;
