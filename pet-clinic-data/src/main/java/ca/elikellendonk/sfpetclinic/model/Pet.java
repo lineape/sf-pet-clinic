@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -27,7 +28,7 @@ public class Pet extends BaseEntity {
   @Column(name = "birth_date")
   private LocalDate birthDate;
 
-  @OneToMany(mappedBy = "pet")
+  @OneToMany(mappedBy = "pet", fetch = FetchType.EAGER)
   private Set<Visit> visits = new HashSet<>();
 
   public String getName() {

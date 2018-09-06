@@ -16,7 +16,8 @@ public class Specialty extends BaseEntity {
   @Column(name = "description")
   private String description;
 
-  @ManyToMany private Set<Vet> vets = new HashSet<>();
+  @ManyToMany(mappedBy = "specialties")
+  private Set<Vet> vets = new HashSet<>();
 
   public String getName() {
     return name;

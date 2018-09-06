@@ -11,7 +11,7 @@ import javax.persistence.Table;
 @Table(name = "visits")
 public class Visit extends BaseEntity {
   @Column(name = "date")
-  private LocalDate date;
+  private LocalDate date = LocalDate.now();
 
   @Column(name = "description")
   private String description;
