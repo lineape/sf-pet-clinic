@@ -46,16 +46,14 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
   @Override
   public void onApplicationEvent(ContextRefreshedEvent event) {
     if (petTypes.count() == 0) {
-      seedPetTypesOwnersAndPets();
+      seedAll();
     }
+  }
 
-    if (specialties.count() == 0) {
-      seedSpecialtiesAndVets();
-    }
-
-    if (visits.count() == 0) {
-      seedVisits();
-    }
+  public void seedAll() {
+    seedPetTypesOwnersAndPets();
+    seedSpecialtiesAndVets();
+    seedVisits();
   }
 
   private void seedPetTypesOwnersAndPets() {
