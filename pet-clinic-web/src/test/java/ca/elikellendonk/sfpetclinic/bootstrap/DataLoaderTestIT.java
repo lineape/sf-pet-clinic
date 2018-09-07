@@ -1,6 +1,6 @@
 package ca.elikellendonk.sfpetclinic.bootstrap;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import ca.elikellendonk.sfpetclinic.SfPetClinicApplication;
 import ca.elikellendonk.sfpetclinic.config.crud.CrudConfigJpa;
@@ -10,14 +10,14 @@ import ca.elikellendonk.sfpetclinic.services.PetTypeService;
 import ca.elikellendonk.sfpetclinic.services.SpecialtyService;
 import ca.elikellendonk.sfpetclinic.services.VetService;
 import ca.elikellendonk.sfpetclinic.services.VisitService;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {SfPetClinicApplication.class, CrudConfigJpa.class})
 @DataJpaTest
 public class DataLoaderTestIT {
