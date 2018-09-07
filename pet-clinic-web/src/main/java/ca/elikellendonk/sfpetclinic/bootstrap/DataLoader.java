@@ -13,10 +13,12 @@ import ca.elikellendonk.sfpetclinic.services.SpecialtyService;
 import ca.elikellendonk.sfpetclinic.services.VetService;
 import ca.elikellendonk.sfpetclinic.services.VisitService;
 import java.time.LocalDate;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @Component
 public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
   private final OwnerService owners;
@@ -44,11 +46,11 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
   @Override
   public void onApplicationEvent(ContextRefreshedEvent event) {
     if (petTypes.count() == 0) {
-      seedOwnersAndPets();
+      seedPetTypesOwnersAndPets();
     }
 
     if (specialties.count() == 0) {
-      seedVetsAndSpecialties();
+      seedSpecialtiesAndVets();
     }
 
     if (visits.count() == 0) {
@@ -56,93 +58,46 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
     }
   }
 
-  private void seedOwnersAndPets() {
-    PetType cat = petTypes.save(makePetType("Cat"));
-    PetType dog = petTypes.save(makePetType("Dog"));
+  private void seedPetTypesOwnersAndPets() {
+    PetType cat = petTypes.save(new PetType("Cat"));
+    PetType dog = petTypes.save(new PetType("Dog"));
 
-    Owner owner1 = makeOwner("Joe", "Smith", "123 Avenue", "New york", "444-222-3333");
-    owner1.addPet(makePet("Ralph", dog));
+    Owner owner1 = new Owner("Joe", "Smith", "123 Avenue", "New york", "444-222-3333");
+    owner1.addPet(new Pet("Ralph", LocalDate.now(), dog));
 
-    Owner owner2 = makeOwner("Jim", "Lee", "123 street", "Toronto", "444-333-2222");
-    owner2.addPet(makePet("Fluffy", dog));
-    owner2.addPet(makePet("Whiskers", cat));
+    Owner owner2 = new Owner("Jim", "Lee", "123 street", "Toronto", "444-333-2222");
+    owner2.addPet(new Pet("Fluffy", LocalDate.now(), dog));
+    owner2.addPet(new Pet("Whiskers", LocalDate.now(), cat));
 
     owners.save(owner1);
     owners.save(owner2);
   }
 
-  private void seedVetsAndSpecialties() {
-    Specialty goodWithCats = specialties.save(makeSpecialty("Cats", "Good with cats"));
-    Specialty goodWithDogs = specialties.save(makeSpecialty("Dogs", "Good with dogs"));
+  private void seedSpecialtiesAndVets() {
+    Specialty cats = specialties.save(new Specialty("Cats", "Good with cats"));
+    Specialty dogs = specialties.save(new Specialty("Dogs", "Good with dogs"));
 
-    Vet vet1 = makeVet("Jill", "Frazier");
-    vet1.addSpecialty(goodWithCats);
+    Vet vet1 = new Vet("Jill", "Frazier");
+    vet1.addSpecialty(cats);
 
-    Vet vet2 = makeVet("Daniel", "Jackson");
-    vet2.addSpecialty(goodWithCats);
-    vet2.addSpecialty(goodWithDogs);
+    Vet vet2 = new Vet("Daniel", "Jackson");
+    vet2.addSpecialty(cats);
+    vet2.addSpecialty(dogs);
 
     vets.save(vet1);
     vets.save(vet2);
   }
 
   private void seedVisits() {
-    visits.save(
-        makeVisit("Ralph is sick", pets.findByName("Ralph"), vets.findByLastName("Jackson")));
-    visits.save(
-        makeVisit("Has a Hairball", pets.findByName("Whiskers"), vets.findByLastName("Frazier")));
-  }
+    Visit visit1 = new Visit("Ralph is sick!");
+    visit1.setPet(pets.findByName("Ralph"));
+    visit1.setVet(vets.findByFirstNameAndLastName("Daniel", "Jackson"));
 
-  private PetType makePetType(String name) {
-    PetType petType = new PetType();
-    petType.setName(name);
+    Visit visit2 = new Visit("Whiskers has a hairball!");
+    visit2.setPet(pets.findByName("Whiskers"));
+    visit2.setVet(vets.findByLastName("Frazier"));
 
-    return petType;
-  }
-
-  private Owner makeOwner(
-      String firstName, String lastName, String address, String city, String telephone) {
-    Owner owner = new Owner();
-    owner.setFirstName(firstName);
-    owner.setLastName(lastName);
-    owner.setAddress(address);
-    owner.setCity(city);
-    owner.setTelephone(telephone);
-
-    return owner;
-  }
-
-  private Pet makePet(String name, PetType petType) {
-    Pet pet = new Pet();
-    pet.setName(name);
-    pet.setBirthDate(LocalDate.now());
-    pet.setPetType(petType);
-
-    return pet;
-  }
-
-  private Vet makeVet(String firstName, String lastName) {
-    Vet vet = new Vet();
-    vet.setFirstName(firstName);
-    vet.setLastName(lastName);
-
-    return vet;
-  }
-
-  private Specialty makeSpecialty(String name, String description) {
-    Specialty specialty = new Specialty();
-    specialty.setName(name);
-    specialty.setDescription(description);
-
-    return specialty;
-  }
-
-  private Visit makeVisit(String description, Pet pet, Vet vet) {
-    Visit visit = new Visit();
-    visit.setDescription(description);
-    visit.setPet(pet);
-    visit.setVet(vet);
-
-    return visit;
+    visits.save(visit1);
+    visits.save(visit2);
   }
 }

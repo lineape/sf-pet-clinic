@@ -2,28 +2,26 @@ package ca.elikellendonk.sfpetclinic.model;
 
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.Setter;
 
+@Getter
+@Setter
 @MappedSuperclass
 public abstract class Person extends BaseEntity {
+  @NonNull
   @Column(name = "first_name")
   private String firstName;
 
+  @NonNull
   @Column(name = "last_name")
   private String lastName;
 
-  public String getFirstName() {
-    return firstName;
-  }
+  public Person() {}
 
-  public void setFirstName(String firstName) {
+  public Person(String firstName, String lastName) {
     this.firstName = firstName;
-  }
-
-  public String getLastName() {
-    return lastName;
-  }
-
-  public void setLastName(String lastName) {
     this.lastName = lastName;
   }
 }

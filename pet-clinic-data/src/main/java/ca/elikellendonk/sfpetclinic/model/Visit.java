@@ -6,15 +6,24 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NonNull;
 
+@Data
+@EqualsAndHashCode(
+    callSuper = true,
+    exclude = {"pet", "vet"})
 @Entity
 @Table(name = "visits")
 public class Visit extends BaseEntity {
-  @Column(name = "date")
-  private LocalDate date = LocalDate.now();
-
+  @NonNull
   @Column(name = "description")
   private String description;
+
+  @NonNull
+  @Column(name = "date")
+  private LocalDate date = LocalDate.now();
 
   @ManyToOne
   @JoinColumn(name = "pet_id")
@@ -23,36 +32,4 @@ public class Visit extends BaseEntity {
   @ManyToOne
   @JoinColumn(name = "vet_id")
   private Vet vet;
-
-  public LocalDate getDate() {
-    return date;
-  }
-
-  public void setDate(LocalDate date) {
-    this.date = date;
-  }
-
-  public String getDescription() {
-    return description;
-  }
-
-  public void setDescription(String description) {
-    this.description = description;
-  }
-
-  public Pet getPet() {
-    return pet;
-  }
-
-  public void setPet(Pet pet) {
-    this.pet = pet;
-  }
-
-  public Vet getVet() {
-    return vet;
-  }
-
-  public void setVet(Vet vet) {
-    this.vet = vet;
-  }
 }
