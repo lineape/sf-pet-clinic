@@ -7,6 +7,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
@@ -32,6 +33,18 @@ public class Owner extends Person {
 
   @OneToMany(cascade = CascadeType.ALL, mappedBy = "owner")
   private Set<Pet> pets = new HashSet<>();
+
+  @Builder
+  public Owner(
+      String firstName,
+      String lastName,
+      String address,
+      String city,
+      String telephone,
+      Set<Pet> pets) {
+    this(firstName, lastName, address, city, telephone);
+    this.pets = pets != null ? pets : new HashSet<>();
+  }
 
   public Owner(String firstName, String lastName, String address, String city, String telephone) {
     super(firstName, lastName);

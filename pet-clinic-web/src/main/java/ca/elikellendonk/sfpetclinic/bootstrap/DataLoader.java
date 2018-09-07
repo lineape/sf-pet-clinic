@@ -61,6 +61,7 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
   private void seedPetTypesOwnersAndPets() {
     PetType cat = petTypes.save(new PetType("Cat"));
     PetType dog = petTypes.save(new PetType("Dog"));
+    PetType bird = petTypes.save(new PetType("Bird"));
 
     Owner owner1 = new Owner("Joe", "Smith", "123 Avenue", "New york", "444-222-3333");
     owner1.addPet(new Pet("Ralph", LocalDate.now(), dog));
@@ -69,20 +70,34 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
     owner2.addPet(new Pet("Fluffy", LocalDate.now(), dog));
     owner2.addPet(new Pet("Whiskers", LocalDate.now(), cat));
 
+    Owner owner3 =
+        Owner.builder()
+            .firstName("Jillian")
+            .lastName("Miller")
+            .address("123 Street")
+            .city("Chicago")
+            .telephone("1233211")
+            .build();
+
+    owner3.addPet(new Pet("Big Bird", LocalDate.now(), bird));
+
     owners.save(owner1);
     owners.save(owner2);
+    owners.save(owner3);
   }
 
   private void seedSpecialtiesAndVets() {
     Specialty cats = specialties.save(new Specialty("Cats", "Good with cats"));
     Specialty dogs = specialties.save(new Specialty("Dogs", "Good with dogs"));
+    Specialty exotic = specialties.save(new Specialty("Exotic Animals", "Does the weird stuff"));
 
     Vet vet1 = new Vet("Jill", "Frazier");
     vet1.addSpecialty(cats);
+    vet1.addSpecialty(dogs);
 
     Vet vet2 = new Vet("Daniel", "Jackson");
     vet2.addSpecialty(cats);
-    vet2.addSpecialty(dogs);
+    vet2.addSpecialty(exotic);
 
     vets.save(vet1);
     vets.save(vet2);
@@ -90,14 +105,22 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 
   private void seedVisits() {
     Visit visit1 = new Visit("Ralph is sick!");
-    visit1.setPet(pets.findByName("Ralph"));
-    visit1.setVet(vets.findByFirstNameAndLastName("Daniel", "Jackson"));
+    visit1.setPet(pets.findByName("Whiskers"));
+    visit1.setVet(vets.findByLastName("Jackson"));
 
     Visit visit2 = new Visit("Whiskers has a hairball!");
-    visit2.setPet(pets.findByName("Whiskers"));
+    visit2.setPet(pets.findByName("Ralph"));
     visit2.setVet(vets.findByLastName("Frazier"));
+
+    Visit visit3 =
+        Visit.builder()
+            .description("Big Bird turned green!")
+            .pet(pets.findByName("Big Bird"))
+            .vet(vets.findByLastName("Jackson"))
+            .build();
 
     visits.save(visit1);
     visits.save(visit2);
+    visits.save(visit3);
   }
 }

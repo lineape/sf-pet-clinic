@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
@@ -23,7 +24,7 @@ public class Visit extends BaseEntity {
 
   @NonNull
   @Column(name = "date")
-  private LocalDate date = LocalDate.now();
+  private LocalDate date;
 
   @ManyToOne
   @JoinColumn(name = "pet_id")
@@ -32,4 +33,17 @@ public class Visit extends BaseEntity {
   @ManyToOne
   @JoinColumn(name = "vet_id")
   private Vet vet;
+
+  @Builder
+  public Visit(String description, LocalDate date, Pet pet, Vet vet) {
+    this(description);
+    this.date = date == null ? this.date : date;
+    this.pet = pet;
+    this.vet = vet;
+  }
+
+  public Visit(String description) {
+    this.description = description;
+    date = LocalDate.now();
+  }
 }
